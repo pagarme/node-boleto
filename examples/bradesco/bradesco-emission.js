@@ -2,7 +2,7 @@
 
 const express = require('express'),
   app = express(),
-  Boleto = require('../index').Boleto;
+  Boleto = require('../../index').Boleto;
 
 let boleto = new Boleto({
   'banco': "bradesco",
@@ -22,7 +22,7 @@ let boleto = new Boleto({
 })
 
 // console.log(boleto['linha_digitavel']);
-app.use(express.static(__dirname + '/../'));
+app.use(express.static(__dirname + '/../../'));
 
 app.get('/', (req, res) => {
   boleto.renderHTML((html) => {
