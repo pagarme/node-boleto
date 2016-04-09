@@ -4,7 +4,7 @@ const express = require('express'),
   app = express(),
   Boleto = require('../index').Boleto;
 
-var boleto = new Boleto({
+let boleto = new Boleto({
   'banco': "santander",
   'data_emissao': new Date(),
   'data_vencimento': new Date(new Date().getTime() + 5 * 24 * 3600 * 1000),
@@ -19,6 +19,7 @@ var boleto = new Boleto({
 })
 
 console.log(boleto['linha_digitavel']);
+
 app.use(express.static(__dirname + '/../'));
 
 app.get('/', (req, res) => {
