@@ -1,5 +1,6 @@
-var fs = require('fs');
+'use strict';
 
-var ediParser = require('../index').EdiParser;
+const fs = require('fs'),
+	ediParser = require('../index').EdiParser;
 
 console.log(ediParser.parse('bradesco', fs.readFileSync(__dirname + "/retorno_bradesco.txt").toString()));

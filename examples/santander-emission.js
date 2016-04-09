@@ -1,8 +1,8 @@
-var express = require('express');
+'use strict';
 
-var app = express();
-
-var Boleto = require('../index').Boleto;
+const express = require('express'),
+  app = express(),
+  Boleto = require('../index').Boleto;
 
 var boleto = new Boleto({
   'banco': "santander",
@@ -19,12 +19,11 @@ var boleto = new Boleto({
 })
 
 console.log(boleto['linha_digitavel']);
-
 app.use(express.static(__dirname + '/../'));
 
-app.get('/', function(req, res){
-  boleto.renderHTML(function(html){
-	return res.send(html);
+app.get('/', (req, res) => {
+  boleto.renderHTML((html) => {
+    return res.send(html);
   });
 });
 
