@@ -32,7 +32,9 @@ var boleto = new Boleto({
   'cedente_cnpj': "18727053000174", // sem pontos e traços
   'agencia': "3978",
   'codigo_cedente': "6404154", // PSK (código da carteira)
-  'carteira': "102"
+  'carteira': "102",
+  'especie_doc': "DM" //Parametro opcional. Padrão: DM. Ex.: DM: Duplicata mercatil,
+  'aceite' : "N" //Parametro opcional. Padrão: N. Opções validas: S ou N.
 });
 
 console.log("Linha digitável: " + boleto['linha_digitavel'])

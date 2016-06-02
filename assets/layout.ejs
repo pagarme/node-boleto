@@ -17,33 +17,33 @@
 
   img{border:0}
 
-  .cp 
+  .cp
   {
-	  font: bold 10px arial; 
+	  font: bold 10px arial;
 	  color: black
   }
-  .ti 
+  .ti
   {
 	  font: 9px arial, helvetica, sans-serif
   }
-  .ld 
+  .ld
   {
-	  font: bold 15px arial; 
+	  font: bold 15px arial;
 	  color: #000000
   }
-  .ct 
+  .ct
   {
-	  font: 9px "arial narrow"; 
+	  font: 9px "arial narrow";
 	  color: #000033
   }
-  .cn 
+  .cn
   {
-	  font: 9px arial; 
+	  font: 9px arial;
 	  color: black
   }
-  .bc 
+  .bc
   {
-	  font: bold 22px arial; 
+	  font: bold 22px arial;
 	  color: #000000
   }
 
@@ -309,8 +309,8 @@
         <tr class="cp h12 rBb">
 			<td><%= formatDate(boleto['data_emissao']) %></td>
 			<td><%= addTrailingZeros(boleto['numero_documento'], 9) %></td>
-            <td>DM</td>
-            <td>N</td>
+			<td><%= boleto['especie_doc'] %></td>
+			<td><%= boleto['aceite'] %></td>
 			<td><%= formatDate(boleto['data_emissao']) %></td>
 			<td class="Ar"><%= addTrailingZeros(boleto['nosso_numero'], 12) %>-<%= boleto['nosso_numero_dv'] %></td>
         </tr>
