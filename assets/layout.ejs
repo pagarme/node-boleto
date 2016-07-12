@@ -147,27 +147,110 @@
   }
   </style>
   <script>
-	var hashString = function(string) {
-		var hash = 0, i, chr, len;
-		if (string.length == 0) return hash;
-		for (i = 0, len = string.length; i < len; i++) {
-			chr   = string.charCodeAt(i);
-			hash  = ((hash << 5) - hash) + chr;
-			hash |= 0; // Convert to 32bit integer
-		}
-		return hash;
-	};
 
-	var isValidLinhaDigitavelId = function(divId) {
-		return (hashString(document.getElementById(divId).innerHTML).toString() == "<%= boleto['linha_digitavel_hash'] %>");
-	};
 
-	var validationInterval = setInterval(function(){
-		if(!isValidLinhaDigitavelId('linha-digitavel-1') || !isValidLinhaDigitavelId('linha-digitavel-2')) {
-			clearInterval(validationInterval);
-			document.body.innerHTML = "<p>Ocorreu um tentativa de adulteração deste boleto bancário. Por favor, verifique se seu computador está vulnerável e/ou visualize este boleto bancário de outro computador.</p>";
-		}
-	}, 1000);
+    (function (window) {
+        var last = +new Date();
+        var delay = 1000;
+
+        var stack = [];
+
+        function callback() {
+            var now = +new Date();
+            if (now - last > delay) {
+                for (var i = 0; i < stack.length; i++) {
+                    stack[i]();
+                }
+                last = now;
+            }
+        }
+
+        var onDomChange = function (fn, newdelay) {
+            if (newdelay) delay = newdelay;
+            stack.push(fn);
+        };
+
+        function naive() {
+
+            var last = document.getElementsByTagName('*');
+            var lastlen = last.length;
+            var timer = setTimeout(function check() {
+
+                var current = document.getElementsByTagName('*');
+                var len = current.length;
+
+                if (len != lastlen) {
+                    last = [];
+                }
+
+                for (var i = 0; i < len; i++) {
+                    if (current[i] !== last[i]) {
+                        callback();
+                        last = current;
+                        lastlen = len;
+                        break;
+                    }
+                }
+
+                setTimeout(check, delay);
+
+            }, delay);
+        }
+
+        var support = {};
+
+        var el = document.documentElement;
+        var remain = 3;
+
+        function decide() {
+            if (support.DOMNodeInserted) {
+                window.addEventListener("DOMContentLoaded", function () {
+                    if (support.DOMSubtreeModified) { // for FF 3+, Chrome
+                        el.addEventListener('DOMSubtreeModified', callback, false);
+                    } else { // for FF 2, Safari, Opera 9.6+
+                        el.addEventListener('DOMNodeInserted', callback, false);
+                        el.addEventListener('DOMNodeRemoved', callback, false);
+                    }
+                }, false);
+            } else if (document.onpropertychange) { // for IE 5.5+
+                document.onpropertychange = callback;
+            } else { // fallback
+                naive();
+            }
+        }
+
+        function test(event) {
+            el.addEventListener(event, function fn() {
+                support[event] = true;
+                el.removeEventListener(event, fn, false);
+                if (--remain === 0) decide();
+            }, false);
+        }
+
+        if (window.addEventListener) {
+            test('DOMSubtreeModified');
+            test('DOMNodeInserted');
+            test('DOMNodeRemoved');
+        } else {
+            decide();
+        }
+
+        var dummy = document.createElement("div");
+        el.appendChild(dummy);
+        el.removeChild(dummy);
+
+        window.onDomChange = onDomChange;
+    })(this);
+
+
+    var domChanged = false;
+    onDomChange(function(){ 
+        if (domChanged === false) {
+            domChanged = true;
+            document.body.innerHTML = "<div style='margin: 50px; text-align: center;'><h1>Ocorreu um tentativa de adulteração deste boleto bancário.</h1><p>Por favor, verifique se seu computador está vulnerável e/ou visualize este boleto bancário de outro computador.</p></div>";
+        }
+    });
+
   </script>
 </head>
 <body>
