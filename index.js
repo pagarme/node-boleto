@@ -1,10 +1,13 @@
-var fs = require('fs');
+'use strict';
+
+const fs = require('fs');
 
 // Load banks
-var banks = {};
-var banksFolders = fs.readdirSync(__dirname + '/banks/');
-for(var i = 0; i < banksFolders.length; i++) {
-  banks[banksFolders[i]] = require(__dirname + '/banks/' + banksFolders[i] + '/index.js');
+let banks = {},
+	banksFolders = fs.readdirSync(__dirname + '/banks/');
+
+for (let i = 0; i < banksFolders.length; i++) {
+	banks[banksFolders[i]] = require(__dirname + '/banks/' + banksFolders[i] + '/index.js');
 }
 
 exports.Boleto = require('./lib/boleto')(banks);

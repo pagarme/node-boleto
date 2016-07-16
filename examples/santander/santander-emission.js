@@ -1,10 +1,10 @@
-var express = require('express');
+'use strict';
 
-var app = express();
+const express = require('express'),
+  app = express(),
+  Boleto = require('../../index').Boleto;
 
-var Boleto = require('../index').Boleto;
-
-var boleto = new Boleto({
+let boleto = new Boleto({
   'banco': "santander",
   'data_emissao': new Date(),
   'data_vencimento': new Date(new Date().getTime() + 5 * 24 * 3600 * 1000),
@@ -20,11 +20,11 @@ var boleto = new Boleto({
 
 console.log(boleto['linha_digitavel']);
 
-app.use(express.static(__dirname + '/../'));
+app.use(express.static(__dirname + '/../../'));
 
-app.get('/', function(req, res){
-  boleto.renderHTML(function(html){
-	return res.send(html);
+app.get('/', (req, res) => {
+  boleto.renderHTML((html) => {
+    return res.send(html);
   });
 });
 
