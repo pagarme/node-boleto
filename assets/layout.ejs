@@ -173,7 +173,11 @@
         </tr>
     </table><br /><table class="w666">
         <tr class="BHead">
+			<% if (boleto.assets && boleto.assets.logo) { %>
+			<td class="imgLogo Al"><img src="<%= boleto.assets.logo %>" /></td>
+			<% } else { %>
 			<td class="imgLogo Al"><img src="<%= logoURL %>" /></td>
+			<% } %>
             <td class="barra"></td>
 			<td class="w72 Ab bc Ac"><%= boleto['codigo_banco'] %></td>
             <td class="barra"></td>
@@ -250,7 +254,11 @@
         <tr class="h13"><td /></tr>
     </table><table class="w666">
         <tr class="BHead">
+			<% if (boleto.assets && boleto.assets.logo) { %>
+			<td class="imgLogo Al"><img src="<%= boleto.assets.logo %>" /></td>
+			<% } else { %>
 			<td class="imgLogo Al"><img src="<%= logoURL %>" /></td>
+			<% } %>
             <td class="barra"></td>
 			<td class="w72 Ab bc Ac"><%= boleto['codigo_banco'] %></td>
             <td class="barra"></td>
@@ -356,11 +364,21 @@
 			  <div class="barcode"/>
 			<% } else if (barcode_render_engine == 'img') { %>
 			  <div class="barcode">
-				<% var black = true; %>
-
+				<% var black = true;
+                   var w = 'https://assets.pagar.me/boleto/images/w.png';
+                   var b = 'https://assets.pagar.me/boleto/images/b.png';
+                   if (boleto.assets) {
+                       if(boleto.assets.white) {
+                           w = boleto.assets.white;
+                       }
+                       if(boleto.assets.black) {
+                           b = boleto.assets.black;
+                       }
+                   }
+                %>
 				<% for(var i = 0; i < barcode_data.length; i++) { %>
 				  <% var pixelsToDraw = (barcode_data[i] == "0") ? 1 : 3; %>
-				  <img class="barcode-line" src="https://assets.pagar.me/boleto/images/<%= black ? 'b' : 'w' %>.png" height="<%= barcode_height %>px" width="<%= pixelsToDraw %>px;" border=0/>
+				  <img class="barcode-line" src="<%= black ? b : w %>" height="<%= barcode_height %>px" width="<%= pixelsToDraw %>px;" border=0/>
 				  <% black = !black; %>
 				<% } %>
 			  </div>
