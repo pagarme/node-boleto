@@ -385,15 +385,35 @@
     (function () {
       var onLoadDocumentElement
       var onLoadDocumentCopy
+      var called
 
-      onDOMReady(function () {
+      onReadyStateChange(documentIsReady)
+
+      function documentIsReady() {
         onLoadDocumentCopy = document.body.children[0].outerHTML
         onLoadDocumentElement = hashString(onLoadDocumentCopy);
 
         onDOMChange(function () {
           document.body.innerHTML = onLoadDocumentCopy;
         })
-      })
+      }
+
+      function onReadyStateChange(callback) {
+        if ( !('onreadystatechange' in document) ) {
+          onDOMReady(callback)
+
+          return
+        }
+
+        document.onreadystatechange = function () {
+          if (called) return
+
+          if (document.readyState === 'interactive' || document.readyState === 'complete') {
+              called = true
+              callback()
+          }
+        }
+      }
 
       function onDOMReady(callback) {
         if (document.readyState === 'complete') return callback();
