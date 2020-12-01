@@ -1,7 +1,6 @@
 const moment = require('moment')
 var formatters = require('../../lib/formatters')
 var ediHelper = require('../../lib/edi-helper')
-var helper = require('./helper')
 
 exports.options = {
   logoURL: 'https://assets.pagar.me/boleto/images/bradesco.jpg',
@@ -97,7 +96,7 @@ exports.parseEDIFile = function (fileContent) {
 
       if (registro == '0') {
         parsedFile['razao_social'] = line.substring(46, 76)
-        parsedFile['data_arquivo'] = helper.dateFromEdiDate(line.substring(94, 100))
+        parsedFile['data_arquivo'] = ediHelper.dateFromEdiDate(line.substring(94, 100))
       } else if (registro == '1') {
         var boleto = {}
 
@@ -122,9 +121,9 @@ exports.parseEDIFile = function (fileContent) {
         }
 
         boleto['motivos_ocorrencia'] = motivosOcorrencia
-        boleto['data_ocorrencia'] = helper.dateFromEdiDate(line.substring(110, 116))
-        boleto['data_credito'] = helper.dateFromEdiDate(line.substring(295, 301))
-        boleto['vencimento'] = helper.dateFromEdiDate(line.substring(110, 116))
+        boleto['data_ocorrencia'] = ediHelper.dateFromEdiDate(line.substring(110, 116))
+        boleto['data_credito'] = ediHelper.dateFromEdiDate(line.substring(295, 301))
+        boleto['vencimento'] = ediHelper.dateFromEdiDate(line.substring(110, 116))
         boleto['valor'] = formatters.removeTrailingZeros(line.substring(152, 165))
         boleto['banco_recebedor'] = formatters.removeTrailingZeros(line.substring(165, 168))
         boleto['agencia_recebedora'] = formatters.removeTrailingZeros(line.substring(168, 173))
