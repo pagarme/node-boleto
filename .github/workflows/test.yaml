@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+
+  linter:
+    name: Linter
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node.js Setup
+        uses: actions/setup-node@v1
+      - name: Installation of Node.js dependencies
+        run: npm install
+      - name: Lint
+        run: npm run lint
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node.js Setup
+        uses: actions/setup-node@v1
+      - name: Installation of Node.js dependencies
+        run: npm install
+      - name: Tests
+        run: npm test
+        env:
+          TZ: America/Sao_Paulo
