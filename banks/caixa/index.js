@@ -11,11 +11,12 @@ exports.parseEDIFile = function (fileContent) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
       const registro = line.substring(0, 1)
+      const inscricao = line.substring(1, 3)
 
       if (registro === '0') {
-        parsedFile['razao_social'] = line.substring(46, 81)
-        parsedFile['data_arquivo'] = ediHelper.dateFromEdiDate(line.substring(99, 105))
-      } else if (registro === '1') {
+        parsedFile['razao_social'] = line.substring(46, 76)
+        parsedFile['data_arquivo'] = ediHelper.dateFromEdiDate(line.substring(94, 100))
+      } else if (registro === '1' && inscricao === '01' || inscricao === '02') {
         const boleto = {}
 
         parsedFile['cnpj'] = formatters.removeTrailingZeros(line.substring(3, 17))
