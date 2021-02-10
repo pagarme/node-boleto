@@ -2,6 +2,11 @@ node-boleto
 =============
 
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=node-boleto&metric=alert_status&token=7d0c239fa1a25383cf94cc67718c4d7fd9ee34bc)](https://sonarcloud.io/dashboard?id=node-boleto)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=node-boleto&metric=coverage&token=7d0c239fa1a25383cf94cc67718c4d7fd9ee34bc)](https://sonarcloud.io/dashboard?id=node-boleto)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=node-boleto&metric=sqale_rating&token=7d0c239fa1a25383cf94cc67718c4d7fd9ee34bc)](https://sonarcloud.io/dashboard?id=node-boleto)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=node-boleto&metric=reliability_rating&token=7d0c239fa1a25383cf94cc67718c4d7fd9ee34bc)](https://sonarcloud.io/dashboard?id=node-boleto)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=node-boleto&metric=security_rating&token=7d0c239fa1a25383cf94cc67718c4d7fd9ee34bc)](https://sonarcloud.io/dashboard?id=node-boleto)
 
 Geração de boleto bancário em Node.js. Os algoritmos de geração da linha digitável e do código de barras foram inspirados no [boletophp](https://github.com/BielSystems/boletophp).
 
