@@ -13,7 +13,8 @@
     "url": "https://github.com/pagarme/node-boleto"
   },
   "dependencies": {
-    "ejs": "2.5.5"
+    "ejs": "2.5.5",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -25,7 +26,6 @@
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.1",
     "mocha": "^3.2.0",
-    "moment": "https://github.com/pagarme/moment/archive/0.0.5.tar.gz",
     "nyc": "15.1.0",
     "ramda": "^0.23.0"
   },
