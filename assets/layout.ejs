@@ -375,12 +375,25 @@
     </table>
     <table class="ctN w666">
         <tr class="h13"><td /></tr>
-        <tr class="h13"><td /></tr>
-        <tr class="h13"><td /></tr>
-        <tr class="h13"><td /></tr>
-        <tr class="h13"><td /></tr>
-        <tr class="h13"><td /></tr>
+        <% if (!boleto['qrcode_url']) { %> 
+            <tr class="h13"><td /></tr>
+            <tr class="h13"><td /></tr>
+            <tr class="h13"><td /></tr>
+            <tr class="h13"><td /></tr>
+            <tr class="h13"><td /></tr>
+        <% } else {} %> 
     </table>
+    <div class="qrCode">
+        <% if (boleto['qrcode_url']) { %> 
+            <img src="<%= boleto['qrcode_url'] %>" />
+            <table class="w666">
+                <tr class="cpN h1">
+                    <td class="pL6"><%- boleto['payment_link_url'] || '' %></td>
+                    <td class="pL6 Ar"></td>
+                </tr>
+            </table>
+        <% } else {} %> 
+    </div>
 </div>
   <script>
     (function () {
