@@ -3,7 +3,7 @@ var formatters = require('../../lib/formatters'),
   helper = require('./helper');
 
 exports.options = {
-  logoURL: 'http://borboleto.com.br/boletos/itau/imagens/logo_itau.gif',
+  logoURL: 'https://parcelaexpress-all-pos-web.s3.amazonaws.com/logo/itau.jpg',
   codigo: '341'
 };
 
