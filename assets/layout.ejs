@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Visualização de boleto</title>
-  <meta name="robots" content="noindex"> 
+  <meta name="robots" content="noindex">
   <meta name="format-detection" content="telephone=no"/>
   <style media="screen, print" type="text/css">
   body
@@ -18,33 +18,33 @@
 
   img{border:0}
 
-  .cp 
+  .cp
   {
-	  font: bold 10px arial; 
+	  font: bold 10px arial;
 	  color: black
   }
-  .ti 
+  .ti
   {
 	  font: 9px arial, helvetica, sans-serif
   }
-  .ld 
+  .ld
   {
-	  font: bold 15px arial; 
+	  font: bold 15px arial;
 	  color: #000000
   }
-  .ct 
+  .ct
   {
-	  font: 9px "arial narrow"; 
+	  font: 9px "arial narrow";
 	  color: #000033
   }
-  .cn 
+  .cn
   {
-	  font: 9px arial; 
+	  font: 9px arial;
 	  color: black
   }
-  .bc 
+  .bc
   {
-	  font: bold 22px arial; 
+	  font: bold 22px arial;
 	  color: #000000
   }
 
@@ -121,7 +121,9 @@
   .mt23{margin-top:23px;}
   .pb4{padding-bottom:14px;}
   .ebc{width:4px;height:440px;border-right:dotted 1px #000000;margin-right:4px;}
-  .qrCode img{width:100px;height:100px}
+  .qrCode img{width:80px;height:80px}
+  .qrCode {text-align: center}
+  .ctNQrCode{font:11px "arial narrow";color:#000033}
   <% if (barcode_render_engine == 'bmp') { %>
 	.barcode {
 		background-image: url(data:image/bmp;base64,<%= barcode_data %>);
@@ -351,7 +353,8 @@
             <td class="w250 Ar">Autenticação mecânica - <b class="cpN">Ficha de Compensação</b></td>
         </tr>
         <tr class="h13"><td colspan="3" /></tr>
-    </table><table class="w666">
+    </table>
+    <table class="w666">
         <tr>
 		  <td class="EcdBar Al pL10">
 			<% if (barcode_render_engine == 'bmp') { %>
@@ -368,32 +371,42 @@
 			  </div>
 			<% } %>
 		  </td>
+            <td>
+                <div class="ctNQrCode qrCode">
+                    <% if (boleto['qrcode_url']) { %>
+                        <div class="t">Pague com qrCode</div>
+                        <img src="<%= boleto['qrcode_url'] %>" />
+                        <div class="t">Confirmação imediata!</div>
+                    <% } else {} %>
+                </div>
+            </td>
         </tr>
-    </table><table class="ctN w666">
+
+    </table>
+    <table class="ctN w666">
         <tr class="h13"><td /></tr>
         <tr><td class="Ar">Corte na linha pontilhada</td></tr>
         <tr><td class="cut" /></tr>
     </table>
     <table class="ctN w666">
         <tr class="h13"><td /></tr>
-        <% if (!boleto['qrcode_url']) { %> 
+        <% if (!boleto['qrcode_url']) { %>
             <tr class="h13"><td /></tr>
             <tr class="h13"><td /></tr>
             <tr class="h13"><td /></tr>
             <tr class="h13"><td /></tr>
             <tr class="h13"><td /></tr>
-        <% } else {} %> 
+        <% } else {} %>
     </table>
     <div class="qrCode">
-        <% if (boleto['qrcode_url']) { %> 
-            <img src="<%= boleto['qrcode_url'] %>" />
+        <% if (boleto['payment_link_url']) { %>
             <table class="w666">
                 <tr class="cpN h1">
                     <td class="pL6"><%- boleto['payment_link_url'] || '' %></td>
                     <td class="pL6 Ar"></td>
                 </tr>
             </table>
-        <% } else {} %> 
+        <% } else {} %>
     </div>
 </div>
   <script>
