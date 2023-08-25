@@ -1,5 +1,7 @@
 name: Build
 
+
+
 on:
   push:
     branches:
@@ -12,30 +14,47 @@ jobs:
   linter:
     name: Linter
     runs-on: ubuntu-18.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
+
       - name: Node.js Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: '14'
+          cache: 'npm'
+
       - name: Installation of Node.js dependencies
         run: npm install
+
       - name: Lint
         run: npm run lint
 
   tests:
+    needs: [linter]
     name: Tests
     runs-on: ubuntu-18.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
+
       - name: Node.js Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: '14'
+          cache: 'npm'
+
       - name: Installation of Node.js dependencies
         run: npm install
-      - name: Tests
+
+      - name: Run tests
         run: npm test
+
       - name: Generate Coverage
         run: npm run cover-report
         env:
           TZ: America/Sao_Paulo
+
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
@@ -46,14 +65,17 @@ jobs:
     name: SonarCloud
     needs: [linter, tests]
     runs-on: ubuntu-18.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Download a single artifact
         uses: actions/download-artifact@v2
         with:
           name: code-coverage-report
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
