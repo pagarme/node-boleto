@@ -10,7 +10,7 @@ exports.options = {
 
 exports.dvBarra = function (barra) {
   var resto2 = formatters.mod11(barra, 9, 1)
-  return (resto2 == 0 || resto2 == 1 || resto2 == 10) ? 1 : 11 - resto2
+  return (resto2 === 0 || resto2 === 1 || resto2 === 10) ? 1 : 11 - resto2
 }
 
 exports.barcodeData = function (boleto) {
@@ -99,16 +99,16 @@ exports.parseEDIFile = function (fileContent) {
       var line = lines[i]
       var registro = line.substring(7, 8)
 
-      if (registro == '0') {
+      if (registro === '0') {
         parsedFile['cnpj'] = line.substring(17, 32)
         parsedFile['razao_social'] = line.substring(72, 102)
         parsedFile['agencia_cedente'] = line.substring(32, 36)
         parsedFile['conta_cedente'] = line.substring(37, 47)
         parsedFile['data_arquivo'] = helper.dateFromEdiDate(line.substring(143, 152))
-      } else if (registro == '3') {
+      } else if (registro === '3') {
         var segmento = line.substring(13, 14)
 
-        if (segmento == 'T') {
+        if (segmento === 'T') {
           var boleto = {}
 
           boleto['codigo_ocorrencia'] = line.substring(15, 17)
@@ -120,11 +120,11 @@ exports.parseEDIFile = function (fileContent) {
 
           currentNossoNumero = formatters.removeTrailingZeros(line.substring(40, 52))
           parsedFile.boletos[currentNossoNumero] = boleto
-        } else if (segmento == 'U') {
+        } else if (segmento === 'U') {
           parsedFile.boletos[currentNossoNumero]['valor_pago'] = formatters.removeTrailingZeros(line.substring(77, 92))
 
           var paid = parsedFile.boletos[currentNossoNumero]['valor_pago'] >= parsedFile.boletos[currentNossoNumero]['valor']
-          paid = paid && parsedFile.boletos[currentNossoNumero]['codigo_ocorrencia'] == '17'
+          paid = paid && parsedFile.boletos[currentNossoNumero]['codigo_ocorrencia'] === '17'
 
           boleto = parsedFile.boletos[currentNossoNumero]
 
