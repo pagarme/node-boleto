@@ -1,6 +1,6 @@
 const moment = require('moment')
-var formatters = require('../../lib/formatters')
-var ediHelper = require('../../lib/edi-helper')
+const formatters = require('../../lib/formatters')
+const ediHelper = require('../../lib/edi-helper')
 
 exports.options = {
   logoURL: 'https://assets.pagar.me/boleto/images/bradesco.jpg',
@@ -8,28 +8,28 @@ exports.options = {
 }
 
 exports.dvBarra = function (barra) {
-  var resto2 = formatters.mod11(barra, 9, 1)
+  const resto2 = formatters.mod11(barra, 9, 1)
   return (resto2 == 0 || resto2 == 1 || resto2 == 10) ? 1 : 11 - resto2
 }
 
 exports.barcodeData = function (boleto) {
-  var codigoBanco = this.options.codigo
-  var numMoeda = '9'
+  const codigoBanco = this.options.codigo
+  const numMoeda = '9'
 
-  var fatorVencimento = formatters.fatorVencimento(moment(boleto['data_vencimento']).utc().format())
+  const fatorVencimento = formatters.fatorVencimento(moment(boleto['data_vencimento']).utc().format())
 
-  var agencia = formatters.addTrailingZeros(boleto['agencia'], 4)
+  const agencia = formatters.addTrailingZeros(boleto['agencia'], 4)
 
-  var valor = formatters.addTrailingZeros(boleto['valor'], 10)
-  var carteira = boleto['carteira']
-  var codigoCedente = formatters.addTrailingZeros(boleto['codigo_cedente'], 7)
+  const valor = formatters.addTrailingZeros(boleto['valor'], 10)
+  const carteira = boleto['carteira']
+  const codigoCedente = formatters.addTrailingZeros(boleto['codigo_cedente'], 7)
 
-  var nossoNumero = carteira + formatters.addTrailingZeros(boleto['nosso_numero'], 11)
+  const nossoNumero = carteira + formatters.addTrailingZeros(boleto['nosso_numero'], 11)
 
-  var barra = codigoBanco + numMoeda + fatorVencimento + valor + agencia + nossoNumero + codigoCedente + '0'
+  const barra = codigoBanco + numMoeda + fatorVencimento + valor + agencia + nossoNumero + codigoCedente + '0'
 
-  var dvBarra = this.dvBarra(barra)
-  var lineData = barra.substring(0, 4) + dvBarra + barra.substring(4, barra.length)
+  const dvBarra = this.dvBarra(barra)
+  const lineData = barra.substring(0, 4) + dvBarra + barra.substring(4, barra.length)
 
   return lineData
 }
@@ -47,11 +47,11 @@ exports.linhaDigitavel = function (barcodeData) {
   // 37-43    -> Conta do Cedente (sem dígito)
   // 44-44    -> Zero (Fixo)
 
-  var campos = []
+  const campos = []
 
   // 1. Campo - composto pelo código do banco, código da moéda, as cinco primeiras posições
   // do campo livre e DV (modulo10) deste campo
-  var campo = barcodeData.substring(0, 3) + barcodeData.substring(3, 4) + barcodeData.substring(19, 20) + barcodeData.substring(20, 24)
+  let campo = barcodeData.substring(0, 3) + barcodeData.substring(3, 4) + barcodeData.substring(19, 20) + barcodeData.substring(20, 24)
   campo = campo + formatters.mod10(campo)
   campo = campo.substring(0, 5) + '.' + campo.substring(5, campo.length)
   campos.push(campo)
@@ -85,20 +85,20 @@ exports.linhaDigitavel = function (barcodeData) {
 
 exports.parseEDIFile = function (fileContent) {
   try {
-    var lines = fileContent.split('\n')
-    var parsedFile = {
+    const lines = fileContent.split('\n')
+    const parsedFile = {
       boletos: []
     }
 
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i]
-      var registro = line.substring(0, 1)
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      const registro = line.substring(0, 1)
 
       if (registro == '0') {
         parsedFile['razao_social'] = line.substring(46, 76)
         parsedFile['data_arquivo'] = ediHelper.dateFromEdiDate(line.substring(94, 100))
       } else if (registro == '1') {
-        var boleto = {}
+        const boleto = {}
 
         parsedFile['cnpj'] = formatters.removeTrailingZeros(line.substring(3, 17))
         parsedFile['carteira'] = formatters.removeTrailingZeros(line.substring(22, 24))
@@ -107,12 +107,12 @@ exports.parseEDIFile = function (fileContent) {
 
         boleto['codigo_ocorrencia'] = line.substring(108, 110)
 
-        var ocorrenciasStr = line.substring(318, 328)
-        var motivosOcorrencia = []
-        var isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] == '06')
+        const ocorrenciasStr = line.substring(318, 328)
+        const motivosOcorrencia = []
+        let isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] == '06')
 
-        for (var j = 0; j < ocorrenciasStr.length; j += 2) {
-          var ocorrencia = ocorrenciasStr.substr(j, 2)
+        for (let j = 0; j < ocorrenciasStr.length; j += 2) {
+          const ocorrencia = ocorrenciasStr.substr(j, 2)
           motivosOcorrencia.push(ocorrencia)
 
           if (ocorrencia != '00') {

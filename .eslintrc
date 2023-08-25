@@ -2,7 +2,8 @@
   "extends": "standard",
   "rules": {
     "eqeqeq": "warn",
-    "no-throw-literal": "off"
+    "no-throw-literal": "off",
+    "no-var": "warn"
   },
   "env": {
     "mocha": true
