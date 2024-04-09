@@ -8,34 +8,45 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-
   linter:
     name: Linter
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    cancel-timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+  
       - name: Node.js Setup
         uses: actions/setup-node@v1
+    
       - name: Installation of Node.js dependencies
         run: npm install
+      
       - name: Lint
         run: npm run lint
 
   tests:
     name: Tests
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    cancel-timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Node.js Setup
         uses: actions/setup-node@v1
+
       - name: Installation of Node.js dependencies
         run: npm install
+      
       - name: Tests
         run: npm test
+      
       - name: Generate Coverage
         run: npm run cover-report
         env:
           TZ: America/Sao_Paulo
+      
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
@@ -45,15 +56,19 @@ jobs:
   sonarcloud:
     name: SonarCloud
     needs: [linter, tests]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    cancel-timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - name: Download a single artifact
         uses: actions/download-artifact@v2
         with:
           name: code-coverage-report
+    
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
