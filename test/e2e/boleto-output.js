@@ -359,14 +359,6 @@ module.exports = (bankLogo, bankNumber, linhaDigitavel, barcode, bmpBarcode) => 
             <tr><td class="Ar">Corte na linha pontilhada</td></tr>
             <tr><td class="cut" /></tr>
         </table>
-        <table class="ctN w666">
-            <tr class="h13"><td /></tr>
-            <tr class="h13"><td /></tr>
-            <tr class="h13"><td /></tr>
-            <tr class="h13"><td /></tr>
-            <tr class="h13"><td /></tr>
-            <tr class="h13"><td /></tr>
-        </table>
     </div>
       <script>
         (function () {
