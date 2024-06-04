@@ -1,10 +1,10 @@
-var fs = require('fs')
-var path = require('path')
+const fs = require('fs')
+const path = require('path')
 
 // Load banks
-var banks = {}
-var banksFolders = fs.readdirSync(path.join(__dirname, '/banks/'))
-for (var i = 0; i < banksFolders.length; i++) {
+const banks = {}
+const banksFolders = fs.readdirSync(path.join(__dirname, '/banks/'))
+for (let i = 0; i < banksFolders.length; i++) {
   banks[banksFolders[i]] = require(path.join(__dirname, '/banks/' + banksFolders[i] + '/index.js'))
 }
 
