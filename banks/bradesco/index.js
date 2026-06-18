@@ -9,7 +9,7 @@ exports.options = {
 
 exports.dvBarra = function (barra) {
   var resto2 = formatters.mod11(barra, 9, 1)
-  return (resto2 == 0 || resto2 == 1 || resto2 == 10) ? 1 : 11 - resto2
+  return (resto2 === 0 || resto2 === 1 || resto2 === 10) ? 1 : 11 - resto2
 }
 
 exports.barcodeData = function (boleto) {
@@ -94,10 +94,10 @@ exports.parseEDIFile = function (fileContent) {
       var line = lines[i]
       var registro = line.substring(0, 1)
 
-      if (registro == '0') {
+      if (registro === '0') {
         parsedFile['razao_social'] = line.substring(46, 76)
         parsedFile['data_arquivo'] = ediHelper.dateFromEdiDate(line.substring(94, 100))
-      } else if (registro == '1') {
+      } else if (registro === '1') {
         var boleto = {}
 
         parsedFile['cnpj'] = formatters.removeTrailingZeros(line.substring(3, 17))
@@ -109,13 +109,13 @@ exports.parseEDIFile = function (fileContent) {
 
         var ocorrenciasStr = line.substring(318, 328)
         var motivosOcorrencia = []
-        var isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] == '06')
+        var isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] === '06')
 
         for (var j = 0; j < ocorrenciasStr.length; j += 2) {
           var ocorrencia = ocorrenciasStr.substr(j, 2)
           motivosOcorrencia.push(ocorrencia)
 
-          if (ocorrencia != '00') {
+          if (ocorrencia !== '00') {
             isPaid = false
           }
         }
