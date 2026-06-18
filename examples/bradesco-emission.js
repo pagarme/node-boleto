@@ -1,11 +1,11 @@
-var express = require('express')
-var path = require('path')
+const express = require('express')
+const path = require('path')
 
-var app = express()
+const app = express()
 
-var Boleto = require('../index').Boleto
+const Boleto = require('../index').Boleto
 
-var boleto = new Boleto({
+const boleto = new Boleto({
   'banco': 'bradesco',
   'data_emissao': new Date(),
   'data_vencimento': new Date(new Date().getTime() + 5 * 24 * 3600 * 1000),
