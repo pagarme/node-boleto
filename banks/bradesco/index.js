@@ -109,14 +109,14 @@ exports.parseEDIFile = function (fileContent) {
 
         var ocorrenciasStr = line.substring(318, 328)
         var motivosOcorrencia = []
-        var isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] == '06')
+        var hasOcorrenciaErrors = false
 
         for (var j = 0; j < ocorrenciasStr.length; j += 2) {
           var ocorrencia = ocorrenciasStr.substr(j, 2)
           motivosOcorrencia.push(ocorrencia)
 
           if (ocorrencia != '00') {
-            isPaid = false
+            hasOcorrenciaErrors = true
           }
         }
 
@@ -125,8 +125,16 @@ exports.parseEDIFile = function (fileContent) {
         boleto['data_credito'] = ediHelper.dateFromEdiDate(line.substring(295, 301))
         boleto['vencimento'] = ediHelper.dateFromEdiDate(line.substring(110, 116))
         boleto['valor'] = formatters.removeTrailingZeros(line.substring(152, 165))
+        boleto['valor_pago'] = formatters.removeTrailingZeros(line.substring(253, 266))
         boleto['banco_recebedor'] = formatters.removeTrailingZeros(line.substring(165, 168))
         boleto['agencia_recebedora'] = formatters.removeTrailingZeros(line.substring(168, 173))
+
+        var isPaid = (parseInt(boleto['valor_pago'], 10) >= parseInt(boleto['valor'], 10) || boleto['codigo_ocorrencia'] == '06')
+
+        if (hasOcorrenciaErrors) {
+          isPaid = false
+        }
+
         boleto['paid'] = isPaid
         boleto['edi_line_number'] = i
         boleto['edi_line_checksum'] = ediHelper.calculateLineChecksum(line)
@@ -137,7 +145,6 @@ exports.parseEDIFile = function (fileContent) {
         boleto['iof_devido'] = formatters.removeTrailingZeros(line.substring(214, 227))
         boleto['abatimento_concedido'] = formatters.removeTrailingZeros(line.substring(227, 240))
         boleto['desconto_concedido'] = formatters.removeTrailingZeros(line.substring(240, 253))
-        boleto['valor_pago'] = formatters.removeTrailingZeros(line.substring(253, 266))
         boleto['juros_mora'] = formatters.removeTrailingZeros(line.substring(266, 279))
         boleto['outros_creditos'] = formatters.removeTrailingZeros(line.substring(279, 292))
         boleto['raw_line'] = line
