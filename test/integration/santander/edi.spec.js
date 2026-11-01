@@ -71,3 +71,28 @@ describe('Santander EDI Parser', () => {
     })
   })
 })
+
+
+describe('Santander EDI Parser - paid detection', () => {
+  const withAmounts = (titleAmount, paidAmount) => {
+    const lines = ediFileContent.split('\n')
+    const titleIndex = lines.findIndex((line) => line.substring(7, 8) === '3' && line.substring(13, 14) === 'T')
+    const paidIndex = titleIndex + 1
+    const setAmount = (line, amount) => line.substring(0, 77) + amount.padStart(15, '0') + line.substring(92)
+
+    lines[titleIndex] = setAmount(lines[titleIndex], titleAmount)
+    lines[paidIndex] = setAmount(lines[paidIndex], paidAmount)
+
+    return ediParser.parse('santander', lines.join('\n'))
+  }
+
+  it('marks a title as paid when the paid amount is larger and has more digits', () => {
+    const result = withAmounts('900', '1000')
+    expect(Object.values(result.boletos)[0].pago).to.be.true
+  })
+
+  it('does not mark a title as paid when the paid amount is smaller and has fewer digits', () => {
+    const result = withAmounts('1000', '900')
+    expect(Object.values(result.boletos)[0].pago).to.be.false
+  })
+})
