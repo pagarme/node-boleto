@@ -28,19 +28,21 @@ exports.parseEDIFile = function (fileContent) {
 
         const motivosOcorrencia = line.substring(79, 82).trim()
 
-        let isPaid = (parseInt(boleto['valor_pago']) >= parseInt(boleto['valor']) || boleto['codigo_ocorrencia'] === '21')
-
-        if (motivosOcorrencia !== '') {
-          isPaid = false
-        }
-
         boleto['motivos_ocorrencia'] = motivosOcorrencia
         boleto['data_ocorrencia'] = ediHelper.dateFromEdiDate(line.substring(110, 116))
         boleto['data_credito'] = ediHelper.dateFromEdiDate(line.substring(293, 299))
         boleto['vencimento'] = ediHelper.dateFromEdiDate(line.substring(146, 152))
         boleto['valor'] = formatters.removeTrailingZeros(line.substring(152, 165))
+        boleto['valor_pago'] = formatters.removeTrailingZeros(line.substring(253, 266))
         boleto['banco_recebedor'] = formatters.removeTrailingZeros(line.substring(165, 168))
         boleto['agencia_recebedora'] = formatters.removeTrailingZeros(line.substring(168, 173))
+
+        let isPaid = (parseInt(boleto['valor_pago'], 10) >= parseInt(boleto['valor'], 10) || boleto['codigo_ocorrencia'] === '21')
+
+        if (motivosOcorrencia !== '') {
+          isPaid = false
+        }
+
         boleto['paid'] = isPaid
         boleto['edi_line_number'] = i
         boleto['edi_line_checksum'] = ediHelper.calculateLineChecksum(line)
@@ -49,7 +51,6 @@ exports.parseEDIFile = function (fileContent) {
         boleto['iof_devido'] = formatters.removeTrailingZeros(line.substring(214, 227))
         boleto['abatimento_concedido'] = formatters.removeTrailingZeros(line.substring(227, 240))
         boleto['desconto_concedido'] = formatters.removeTrailingZeros(line.substring(240, 253))
-        boleto['valor_pago'] = formatters.removeTrailingZeros(line.substring(253, 266))
         boleto['juros_mora'] = formatters.removeTrailingZeros(line.substring(266, 279))
         boleto['outros_creditos'] = formatters.removeTrailingZeros(line.substring(279, 292))
         boleto['raw_line'] = line
