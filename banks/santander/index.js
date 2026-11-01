@@ -123,7 +123,7 @@ exports.parseEDIFile = function (fileContent) {
         } else if (segmento == 'U') {
           parsedFile.boletos[currentNossoNumero]['valor_pago'] = formatters.removeTrailingZeros(line.substring(77, 92))
 
-          var paid = parsedFile.boletos[currentNossoNumero]['valor_pago'] >= parsedFile.boletos[currentNossoNumero]['valor']
+          var paid = parseInt(parsedFile.boletos[currentNossoNumero]['valor_pago'], 10) >= parseInt(parsedFile.boletos[currentNossoNumero]['valor'], 10)
           paid = paid && parsedFile.boletos[currentNossoNumero]['codigo_ocorrencia'] == '17'
 
           boleto = parsedFile.boletos[currentNossoNumero]

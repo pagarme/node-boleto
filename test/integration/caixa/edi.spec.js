@@ -97,3 +97,27 @@ describe('Caixa EDI Parser', () => {
     })
   })
 })
+
+
+describe('Caixa EDI Parser - paid detection', () => {
+  it('marks a title as paid when the paid amount reaches the title amount, even with a non-liquidation occurrence code', () => {
+    const lines = ediFileContent.split('\n')
+    const index = lines.findIndex((line) => line.substring(0, 1) === '1' && line.substring(108, 110) === '21')
+    let line = lines[index]
+
+    // '02' is not a liquidation code, and the paid amount (positions 254-266)
+    // is set to the title amount (positions 153-165) of the same line.
+    line = line.substring(0, 108) + '02' + line.substring(110)
+    line = line.substring(0, 253) + line.substring(152, 165) + line.substring(266)
+    lines[index] = line
+
+    const result = ediParser.parse('caixa', lines.join('\n'))
+
+    expect(result.boletos[0]).to.containSubset({
+      codigo_ocorrencia: '02',
+      valor: '113',
+      valor_pago: '113',
+      paid: true
+    })
+  })
+})
